@@ -12,17 +12,24 @@ after_success:
   - docker build -t ryanbraving/multi-nginx ./nginx
   - docker build -t ryanbraving/multi-server ./server
   - docker build -t ryanbraving/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push ryanbraving/multi-client
+  - docker push ryanbraving/multi-nginx
+  - docker push ryanbraving/multi-server
+  - docker push ryanbraving/multi-worker
 
-deploy:
-  provider: elasticbeanstalk
-  region: "us-west-2"
-  app: "docker-react"
-  env: "docker-react-env"
-  bucket_name: "elasticbeanstalk-us-west-2-038933440787"
-  bucket_path: "docker-react"
-  on:
-    branch: main
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key: "$AWS_SECRET_KEY"
+#deploy:
+#  provider: elasticbeanstalk
+#  region: "us-west-2"
+#  app: "docker-react"
+#  env: "docker-react-env"
+#  bucket_name: "elasticbeanstalk-us-west-2-038933440787"
+#  bucket_path: "docker-react"
+#  on:
+#    branch: main
+#  access_key_id: $AWS_ACCESS_KEY
+#  secret_access_key: "$AWS_SECRET_KEY"
 
 
